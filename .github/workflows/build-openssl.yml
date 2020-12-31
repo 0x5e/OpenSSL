@@ -1,0 +1,73 @@
+
+name: Build OpenSSL
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+
+      # Avaliablr OpenSSL versions:
+      # https://www.openssl.org/source/
+      openssl_version: 
+        description: 'OpenSSL version'
+        required: true
+        default: '1.1.1i'
+
+      # Avaliable Xcode versions:
+      # https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md#xcode
+      xcode_version:
+        description: 'Xcode version'
+        required: true
+        default: '11.2.1' 
+
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+
+jobs:
+  build:
+    runs-on: macOS-10.15
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Build
+      id: build
+      env:
+        DEVELOPER_DIR: /Applications/Xcode_${{ github.event.inputs.xcode_version }}.app/Contents/Developer
+      run: |
+        sed -i 's/OPENSSL_VERSION=".*"/OPENSSL_VERSION="${{ github.event.inputs.openssl_version }}"/g' scripts/build.sh
+        cat scripts/build.sh | grep "OPENSSL_VERSION=" > release.txt
+        echo "DEVELOPER_DIR=$DEVELOPER_DIR" >> release.txt
+        xcrun xcodebuild -version >> release.txt
+        cat release.txt
+        make
+
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
+    - name: Organize files
+      id: organize
+      run: |
+        rm -rf outputs
+        mkdir -p outputs
+
+        zip -ry outputs/OpenSSL-${{ github.event.inputs.openssl_version }}.dynamic-framework.zip Frameworks/OpenSSL.xcframework
+        zip -ry outputs/OpenSSL-${{ github.event.inputs.openssl_version }}.static-library.zip iphoneos iphonesimulator macos macos_catalyst
+
+        echo "OUTPUTS=$PWD/outputs" >> $GITHUB_ENV
+
+    - name: Upload files to release
+      uses: softprops/action-gh-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.event.inputs.openssl_version }}
+        body_path: release.txt
+        files: ${{ env.OUTPUTS }}/*
