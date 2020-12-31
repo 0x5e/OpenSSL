@@ -38,7 +38,7 @@ jobs:
       env:
         DEVELOPER_DIR: /Applications/Xcode_${{ github.event.inputs.xcode_version }}.app/Contents/Developer
       run: |
-        sed -i 's/OPENSSL_VERSION=".*"/OPENSSL_VERSION="${{ github.event.inputs.openssl_version }}"/g' scripts/build.sh
+        sed -i '' 's/OPENSSL_VERSION=".*"/OPENSSL_VERSION="${{ github.event.inputs.openssl_version }}"/g' scripts/build.sh
         cat scripts/build.sh | grep "OPENSSL_VERSION=" > release.txt
         echo "DEVELOPER_DIR=$DEVELOPER_DIR" >> release.txt
         xcrun xcodebuild -version >> release.txt
