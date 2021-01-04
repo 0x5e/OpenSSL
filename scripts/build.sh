@@ -132,8 +132,8 @@ build_ios() {
 
    build "i386" "iPhoneSimulator" ${TMP_BUILD_DIR} "iphonesimulator"
    build "x86_64" "iPhoneSimulator" ${TMP_BUILD_DIR} "iphonesimulator"
-   # build "arm64" "iPhoneSimulator" ${TMP_BUILD_DIR} "iphonesimulator"
-   # build "arm64e" "iPhoneSimulator" ${TMP_BUILD_DIR} "iphonesimulator"
+   build "arm64" "iPhoneSimulator" ${TMP_BUILD_DIR} "iphonesimulator"
+   build "arm64e" "iPhoneSimulator" ${TMP_BUILD_DIR} "iphonesimulator"
 
    rm -rf "${SCRIPT_DIR}"/../{iphoneos/include,iphoneos/lib}
    mkdir -p "${SCRIPT_DIR}"/../{iphoneos/include,iphoneos/lib}
@@ -148,7 +148,7 @@ build_ios() {
    cp -f "${SCRIPT_DIR}/../shim/shim.h" "${SCRIPT_DIR}/../iphoneos/include/openssl/shim.h"
 
    # Copy headers
-   ditto "${TMP_BUILD_DIR}/${OPENSSL_VERSION}-iPhoneSimulator-x86_64/include/openssl" "${SCRIPT_DIR}/../iphonesimulator/include/openssl"
+   ditto "${TMP_BUILD_DIR}/${OPENSSL_VERSION}-iPhoneSimulator-arm64e/include/openssl" "${SCRIPT_DIR}/../iphonesimulator/include/openssl"
    cp -f "${SCRIPT_DIR}/../shim/shim.h" "${SCRIPT_DIR}/../iphonesimulator/include/openssl/shim.h"
 
    # fix inttypes.h
@@ -196,8 +196,8 @@ build_macos() {
    mkdir -p "${SCRIPT_DIR}"/../{macos/include,macos/lib}
 
    build "x86_64" "MacOSX" ${TMP_BUILD_DIR} "macos"
-   # build "arm64" "MacOSX" ${TMP_BUILD_DIR} "macos"
-   # build "arm64e" "MacOSX" ${TMP_BUILD_DIR} "macos"
+   build "arm64" "MacOSX" ${TMP_BUILD_DIR} "macos"
+   build "arm64e" "MacOSX" ${TMP_BUILD_DIR} "macos"
 
    # Copy headers
    ditto ${TMP_BUILD_DIR}/${OPENSSL_VERSION}-MacOSX-x86_64/include/openssl "${SCRIPT_DIR}/../macos/include/openssl"
@@ -232,7 +232,7 @@ build_catalyst() {
    mkdir -p "${SCRIPT_DIR}"/../{macos_catalyst/include,macos_catalyst/lib}
 
    build "x86_64" "MacOSX_Catalyst" ${TMP_BUILD_DIR} "macos_catalyst"
-   # build "arm64" "MacOSX_Catalyst" ${TMP_BUILD_DIR} "macos_catalyst"
+   build "arm64" "MacOSX_Catalyst" ${TMP_BUILD_DIR} "macos_catalyst"
    # build "arm64e" "MacOSX_Catalyst" ${TMP_BUILD_DIR} "macos_catalyst"
 
    # Copy headers
