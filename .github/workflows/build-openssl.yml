@@ -6,19 +6,26 @@ on:
   workflow_dispatch:
     inputs:
 
-      # Avaliablr OpenSSL versions:
-      # https://www.openssl.org/source/
-      openssl_version:
-        description: 'OpenSSL version'
+      # Avaliable macOS versions:
+      # https://github.com/actions/virtual-environments#available-environments
+      macos_version:
+        description: 'macOS version'
         required: true
-        default: '1.1.1i'
+        default: '11.0'
 
       # Avaliable Xcode versions:
       # https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md#xcode
       xcode_version:
         description: 'Xcode version'
         required: true
-        default: '12'
+        default: '12.2'
+
+      # Avaliable OpenSSL versions:
+      # https://www.openssl.org/source/
+      openssl_version:
+        description: 'OpenSSL version'
+        required: true
+        default: '1.1.1i'
 
       ssh:
         description: 'SSH connection to Actions'
@@ -27,7 +34,7 @@ on:
 
 jobs:
   build:
-    runs-on: macOS-10.15
+    runs-on: macOS-${{ github.event.inputs.macos_version }}
 
     steps:
     - name: Checkout
