@@ -1,7 +1,9 @@
 // swift-tools-version:5.3
- 
+
 import PackageDescription
- 
+
+let opensslVersion = "1.1.1i"
+
 let package = Package(
     name: "OpenSSL",
     platforms: [
@@ -16,7 +18,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "OpenSSL",
-            path: "Frameworks/OpenSSL.xcframework"
+            url: "https://github.com/krzyzanowskim/OpenSSL/releases/download/\(opensslVersion)/OpenSSL-\(opensslVersion).dynamic-framework.zip",
+            checksum: "The checksum of the ZIP archive that contains the XCFramework."
         )
     ]
 )

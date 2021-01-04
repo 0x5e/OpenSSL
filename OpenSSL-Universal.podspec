@@ -1,11 +1,13 @@
+openssl_version = '1.1.1i'
+
 Pod::Spec.new do |s|
   s.name         = "OpenSSL-Universal"
-  s.version      = "1.1.180"
+  s.version      = "#{openssl_version[0..-2]}.#{("a".."z").to_a.index openssl_version[-1]}" # 1.1.1i -> 1.1.1.8
   s.summary      = "OpenSSL for iOS and OS X"
   s.description  = "OpenSSL is an SSL/TLS and Crypto toolkit. Deprecated in Mac OS and gone in iOS, this spec gives your project non-deprecated OpenSSL support. Supports OSX and iOS including Simulator (armv7,armv7s,arm64,x86_64)."
   s.homepage     = "https://github.com/krzyzanowskim/OpenSSL"
   s.license	     = { :type => 'OpenSSL (OpenSSL/SSLeay)', :file => 'LICENSE.txt' }
-  s.source       = { :git => "https://github.com/krzyzanowskim/OpenSSL.git", :tag => "#{s.version}" }
+  s.source       = { :http => "https://github.com/krzyzanowskim/OpenSSL/releases/download/#{openssl_version}/OpenSSL-#{openssl_version}.dynamic-framework.zip" }
 
   s.authors       =  {'Mark J. Cox' => 'mark@openssl.org',
                      'Ralf S. Engelschall' => 'rse@openssl.org',
@@ -23,7 +25,7 @@ Pod::Spec.new do |s|
                      'Eric A. Young' => 'eay@cryptsoft.com',
                      'Tim Hudson' => 'tjh@cryptsoft.com',
                      'Justin Plouffe' => 'plouffe.justin@gmail.com'}
-                   
+
   s.requires_arc = true
   s.cocoapods_version = '>= 1.9'
   s.ios.deployment_target = '9.0'
