@@ -8,7 +8,7 @@ on:
 
       # Avaliablr OpenSSL versions:
       # https://www.openssl.org/source/
-      openssl_version: 
+      openssl_version:
         description: 'OpenSSL version'
         required: true
         default: '1.1.1i'
@@ -18,7 +18,7 @@ on:
       xcode_version:
         description: 'Xcode version'
         required: true
-        default: '11.2.1' 
+        default: '12'
 
       ssh:
         description: 'SSH connection to Actions'
